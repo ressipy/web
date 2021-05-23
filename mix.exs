@@ -20,7 +20,7 @@ defmodule Ressipy.MixProject do
   def application do
     [
       mod: {Ressipy.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :os_mon]
     ]
   end
 
@@ -34,6 +34,7 @@ defmodule Ressipy.MixProject do
   defp deps do
     [
       {:bcrypt_elixir, "~> 2.0"},
+      {:ecto_psql_extras, "~> 0.2"},
       {:ecto_sql, "~> 3.4"},
       {:floki, ">= 0.27.0", only: :test},
       {:gettext, "~> 0.11"},

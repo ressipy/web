@@ -3,8 +3,10 @@ app = "ressipy"
 kill_signal = "SIGTERM"
 kill_timeout = 5
 
+[env]
+
 [deploy]
-release_command = "/app/bin/ressipy eval \"Ressipy.Release.migrate()\""
+release_command = "eval Ressipy.Release.migrate"
 
 [[services]]
   internal_port = 4000
