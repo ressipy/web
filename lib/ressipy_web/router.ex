@@ -40,6 +40,7 @@ defmodule RessipyWeb.Router do
 
     get "/", CategoryController, :index
     get "/categories/:slug", CategoryController, :show
+    get "/recipes/:slug", RecipeController, :show
   end
 
   ## Authentication routes

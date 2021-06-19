@@ -6,6 +6,7 @@ defmodule Ressipy.Recipes do
   import Ecto.Query
 
   alias Ressipy.Recipes.Category
+  alias Ressipy.Recipes.Recipe
   alias Ressipy.Repo
 
   @doc """
@@ -57,7 +58,44 @@ defmodule Ressipy.Recipes do
   """
   @spec get_category!(String.t()) :: Category.t()
   def get_category!(slug) do
-    Repo.get_by!(Category, slug: slug)
+    query =
+      from c in Category,
+        left_join: r in assoc(c, :recipes),
+        preload: [recipes: r],
+        order_by: r.name
+
+    Repo.get_by!(query, slug: slug)
+  end
+
+  @doc """
+  Gets a single recipe.
+
+  Raises `Ecto.NoResultsError` if the Recipe does not exist.
+
+  ## Examples
+
+      iex> get_recipe!("chicken-parmesan")
+      %Recipe{}
+
+      iex> get_recipe!("cake")
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_recipe!(slug) do
+    query =
+      from r in Recipe,
+        left_join: c in assoc(r, :category),
+        left_join: s in assoc(r, :instructions),
+        left_join: j in assoc(r, :ingredients),
+        left_join: g in assoc(j, :ingredient),
+        preload: [
+          category: c,
+          ingredients: {j, ingredient: g},
+          instructions: s
+        ],
+        order_by: [j.order, s.order]
+
+    Repo.get_by!(query, slug: slug)
   end
 
   @doc """

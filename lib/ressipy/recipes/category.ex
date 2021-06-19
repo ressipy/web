@@ -6,6 +6,7 @@ defmodule Ressipy.Recipes.Category do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Ressipy.Recipes.Recipe
   alias Ressipy.Util
 
   @type t :: %__MODULE__{
@@ -17,8 +18,10 @@ defmodule Ressipy.Recipes.Category do
         }
 
   schema "categories" do
-    field(:name, :string)
-    field(:slug, :string)
+    field :name, :string
+    field :slug, :string
+
+    has_many :recipes, Recipe
 
     timestamps()
   end

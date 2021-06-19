@@ -3,16 +3,10 @@
   <%= @category.name %>
 </h2>
 
-<%# <ul> %>
-<%# <%= for recipe <- @category.recipes do %1> %>
-<%# <li> %>
-<%# <%= link recipe.name, to: Routes.recipe_path(@conn, :show, recipe.slug) %1> %>
-<%# <div> %>
-<%# <span><%= link "Edit", to: Routes.recipe_path(@conn, :edit, recipe.slug) %1></span> %>
-<%# <span><%= link "Delete", to: Routes.recipe_path(@conn, :delete, recipe.slug), method: :delete, data: [confirm: "Are you sure?"] %1></span> %>
-<%# </div> %>
-<%# </li> %>
-<%# <% end %1> %>
-<%# </ul> %>
-
-<%# <%= link "New Recipe", to: Routes.recipe_path(@conn, :new, category: @category.slug) %1> %>
+<ul>
+  <%= for recipe <- @category.recipes do %>
+    <li>
+      <%= link recipe.name, to: Routes.recipe_path(@conn, :show, recipe.slug) %>
+    </li>
+  <% end %>
+</ul>
