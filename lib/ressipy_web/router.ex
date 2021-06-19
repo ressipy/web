@@ -21,8 +21,25 @@ defmodule RessipyWeb.Router do
   scope "/", RessipyWeb do
     pipe_through :browser
 
-    live "/", PageLive, :index
+    # live "/", PageLive, :index
     live_dashboard "/dashboard", metrics: RessipyWeb.Telemetry
+  end
+
+  ## Recipe routes
+
+  scope "/", RessipyWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    get "/categories/new", CategoryController, :new
+
+    post "/categories", CategoryController, :create
+  end
+
+  scope "/", RessipyWeb do
+    pipe_through :browser
+
+    get "/", CategoryController, :index
+    get "/categories/:slug", CategoryController, :show
   end
 
   ## Authentication routes

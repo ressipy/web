@@ -1,0 +1,9 @@
+<ul>
+  <%= for category <- @categories do %>
+    <li>
+      <%= link category.name, to: Routes.category_path(@conn, :show, category.slug) %>
+    </li>
+  <% end %>
+</ul>
+
+<%= link "New Category", to: Routes.category_path(@conn, :new) %>
