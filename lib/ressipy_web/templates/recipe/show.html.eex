@@ -15,4 +15,4 @@
   <% end %>
 </ol>
 
-<%= link "Back", to: Routes.category_path(@conn, :show, @recipe.category.slug), class: "btn btn-default" %>
+<%= link "Back", to: Routes.category_path(@conn, :show, @recipe.category.slug) %>
