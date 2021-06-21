@@ -1,12 +1,7 @@
-<h2>
-  <%= link "Categories", to: Routes.category_path(@conn, :index) %> &gt;
-  <%= @category.name %>
-</h2>
-
-<ul>
+<ul class="divide-y divide-gray-200">
   <%= for recipe <- @category.recipes do %>
     <li>
-      <%= link recipe.name, to: Routes.recipe_path(@conn, :show, recipe.slug) %>
+      <%= link recipe.name, to: Routes.recipe_path(@conn, :show, recipe.slug), class: "block p-4 text-lg font-regular" %>
     </li>
   <% end %>
 </ul>

@@ -1,9 +1,7 @@
-<ul>
+<ul class="divide-y divide-gray-200">
   <%= for category <- @categories do %>
     <li>
-      <%= link category.name, to: Routes.category_path(@conn, :show, category.slug) %>
+      <%= link category.name, to: Routes.category_path(@conn, :show, category.slug), class: "block p-4 text-lg font-regular" %>
     </li>
   <% end %>
 </ul>
-
-<%= link "New Category", to: Routes.category_path(@conn, :new) %>

@@ -1,18 +1,26 @@
-<h2><%= @recipe.name %></h2>
-<p>by <%= @recipe.author %></p>
+<main class="p-4">
+  <div class="md:flex md:items-center md:justify-between">
+    <div class="flex-1 min-w-0">
+      <h2
+        class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate"
+      >
+        <%= @recipe.name %>
+      </h2>
+      <p class="text-sm font-medium text-gray-500">by <%= @recipe.author %></p>
+    </div>
+  </div>
 
-<strong>Ingredients:</strong>
-<ul>
-  <%= for ingredient <- @recipe.ingredients do %>
-    <li><%= ingredient.amount %> <%= ingredient.ingredient.name %></li>
-  <% end %>
-</ul>
+  <h3 class="mt-4 text-sm font-bold text-gray-500">Ingredients</h3>
+  <ul class="list-disc px-4">
+    <%= for ingredient <- @recipe.ingredients do %>
+      <li><%= ingredient.amount %> <%= ingredient.ingredient.name %></li>
+    <% end %>
+  </ul>
 
-<strong>Instructions:</strong>
-<ol>
-  <%= for step <- @recipe.instructions do %>
-    <li><%= step.text %></li>
-  <% end %>
-</ol>
-
-<%= link "Back", to: Routes.category_path(@conn, :show, @recipe.category.slug) %>
+  <h3 class="mt-4 text-sm font-bold text-gray-500">Instructions</h3>
+  <ol class="list-decimal px-4">
+    <%= for step <- @recipe.instructions do %>
+      <li><%= step.text %></li>
+    <% end %>
+  </ol>
+</main>
