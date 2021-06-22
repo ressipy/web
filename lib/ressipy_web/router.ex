@@ -43,6 +43,17 @@ defmodule RessipyWeb.Router do
     get "/recipes/:slug", RecipeController, :show
   end
 
+  ## API routes
+
+  scope "/api", RessipyWeb.Api do
+    pipe_through [:api]
+
+    get "/categories", CategoryController, :index
+    get "/categories/:slug", CategoryController, :show
+
+    get "/recipes/:slug", RecipeController, :show
+  end
+
   ## Authentication routes
 
   scope "/", RessipyWeb do
