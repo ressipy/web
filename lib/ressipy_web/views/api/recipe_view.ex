@@ -5,12 +5,14 @@ defmodule RessipyWeb.Api.RecipeView do
 
   def render("show.json", %{recipe: recipe}) do
     %{
-      author: recipe.author,
-      category: category_json(recipe.category),
-      ingredients: Enum.map(recipe.ingredients, &ingredient_json/1),
-      instructions: Enum.map(recipe.instructions, &instruction_json/1),
-      name: recipe.name,
-      slug: recipe.slug
+      recipe: %{
+        author: recipe.author,
+        category: category_json(recipe.category),
+        ingredients: Enum.map(recipe.ingredients, &ingredient_json/1),
+        instructions: Enum.map(recipe.instructions, &instruction_json/1),
+        name: recipe.name,
+        slug: recipe.slug
+      }
     }
   end
 
