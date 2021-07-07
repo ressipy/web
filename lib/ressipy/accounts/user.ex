@@ -2,12 +2,25 @@ defmodule Ressipy.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type role :: :admin | :editor | :user
+
+  @type t :: %__MODULE__{
+          confirmed_at: NaiveDateTime.t(),
+          email: String.t(),
+          hashed_password: String.t(),
+          inserted_at: NaiveDateTime.t(),
+          password: String.t(),
+          role: role,
+          updated_at: NaiveDateTime.t()
+        }
+
   @derive {Inspect, except: [:password]}
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
+    field :role, Ecto.Enum, values: [:admin, :editor, :user], default: :user
 
     timestamps()
   end

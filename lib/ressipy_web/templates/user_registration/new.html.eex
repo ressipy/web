@@ -1,26 +1,40 @@
-<h1>Register</h1>
+<div class="bg-white flex">
+  <div class="flex flex-col md:justify-center px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 w-full">
+    <div class="mx-auto w-full max-w-lg">
+      <div>
+        <h2 class="mt-6 text-3xl font-extrabold text-gray-900">Create an account</h2>
+        <p class="mt-2 text-sm text-gray-600">
+          Or
+          <%= link "sign in to an existing one", to: Routes.user_session_path(@conn, :new), class: "font-medium text-red-600 hover:text-red-500" %>
+        </p>
+      </div>
 
-<%= form_for @changeset, Routes.user_registration_path(@conn, :create), fn f -> %>
-  <%= if @changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
+      <div class="mt-8">
+        <div class="mt-6">
+          <%= f = form_for @changeset, Routes.user_registration_path(@conn, :create), id: "registration_form", class: "space-y-6" %>
+            <div>
+              <%= label f, :email, "Email address", class: "block text-sm font-medium text-gray-700" %>
+              <div class="mt-1">
+                <%= email_input f, :email, required: true, autocomplete: "email", id: "email", phx_debounce: "blur", class: "appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" %>
+              </div>
+              <%= error_tag f, :email %>
+            </div>
+
+            <div class="space-y-1">
+              <%= label f, :password, class: "block text-sm font-medium text-gray-700" %>
+              <div class="mt-1">
+                <%= password_input f, :password, required: true, value: input_value(f, :password), autocomplete: "current-password", id: "password", phx_debounce: "blur", class: "appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" %>
+              </div>
+              <div class="text-xs text-gray-500">At least 8 characters including 1 letter, 1 number, 1 symbol</div>
+              <%= error_tag f, :password %>
+            </div>
+
+            <div>
+              <%= submit "Create account", class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-  <% end %>
-
-  <%= label f, :email %>
-  <%= email_input f, :email, required: true %>
-  <%= error_tag f, :email %>
-
-  <%= label f, :password %>
-  <%= password_input f, :password, required: true %>
-  <%= error_tag f, :password %>
-
-  <div>
-    <%= submit "Register" %>
   </div>
-<% end %>
-
-<p>
-  <%= link "Log in", to: Routes.user_session_path(@conn, :new) %> |
-  <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new) %>
-</p>
+</div>

@@ -139,6 +139,27 @@ defmodule RessipyWeb.UserAuth do
     end
   end
 
+  @doc """
+  Used for routes that require the user to have edit permission.
+  """
+  def require_admin(conn, _opts) do
+    conn = require_authenticated_user(conn, [])
+
+    cond do
+      conn.halted ->
+        conn
+
+      conn.assigns.current_user.role == :admin ->
+        conn
+
+      true ->
+        conn
+        |> put_flash(:error, "You aren't authorized to access that page.")
+        |> redirect(to: Routes.category_path(conn, :index))
+        |> halt()
+    end
+  end
+
   defp maybe_store_return_to(%{method: "GET"} = conn) do
     put_session(conn, :user_return_to, current_path(conn))
   end

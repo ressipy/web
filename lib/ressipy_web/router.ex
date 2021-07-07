@@ -19,7 +19,7 @@ defmodule RessipyWeb.Router do
   end
 
   scope "/", RessipyWeb do
-    pipe_through :browser
+    pipe_through [:browser, :require_admin]
 
     # live "/", PageLive, :index
     live_dashboard "/dashboard", metrics: RessipyWeb.Telemetry
