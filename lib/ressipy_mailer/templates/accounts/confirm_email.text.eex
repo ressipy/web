@@ -1,0 +1,11 @@
+Hi there!
+
+You're almost ready to cook up some amazing food! You just need to confirm your
+email address by clicking the button below so that we know it's really you:
+
+<%= @url %>
+
+If you didn't create an account with Ressipy, feel free to ignore this email.
+
+Thanks,
+Ressipy

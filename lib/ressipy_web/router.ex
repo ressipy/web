@@ -18,6 +18,10 @@ defmodule RessipyWeb.Router do
     plug :accepts, ["json"]
   end
 
+  if Application.get_env(:ressipy, :include_sent_email_route?, false) do
+    forward "/sent_emails", Bamboo.SentEmailViewerPlug
+  end
+
   scope "/", RessipyWeb do
     pipe_through [:browser, :require_admin]
 

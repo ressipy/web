@@ -33,6 +33,8 @@ defmodule Ressipy.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bamboo, "~> 2.2"},
+      {:bamboo_phoenix, "~> 1.0"},
       {:bcrypt_elixir, "~> 2.0"},
       {:ecto_psql_extras, "~> 0.2"},
       {:ecto_sql, "~> 3.4"},
