@@ -34,9 +34,11 @@ defmodule RessipyWeb.Router do
   scope "/", RessipyWeb do
     pipe_through [:browser, :require_authenticated_user]
 
-    get "/categories/new", CategoryController, :new
-
     post "/categories", CategoryController, :create
+    get "/categories/new", CategoryController, :new
+    get "/categories/:slug/edit", CategoryController, :edit
+    put "/categories/:slug", CategoryController, :update
+    delete "/categories/:slug", CategoryController, :delete
   end
 
   scope "/", RessipyWeb do

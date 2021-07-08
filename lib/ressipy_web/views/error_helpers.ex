@@ -11,7 +11,7 @@ defmodule RessipyWeb.ErrorHelpers do
   def error_tag(form, field) do
     Enum.map(Keyword.get_values(form.errors, field), fn error ->
       content_tag(:span, translate_error(error),
-        class: "invalid-feedback",
+        class: "block mt-2 text-sm text-red-600 font-semibold",
         phx_feedback_for: input_name(form, field)
       )
     end)

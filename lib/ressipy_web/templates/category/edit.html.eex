@@ -4,12 +4,14 @@
   >
     <div class="mx-auto w-full max-w-sm lg:w-96">
       <div>
-        <h2 class="mt-6 text-3xl font-extrabold text-gray-900">New Category</h2>
+        <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
+          Edit Category
+        </h2>
       </div>
 
       <div class="mt-8">
         <div class="mt-6">
-          <%= render "form.html", changeset: @changeset, action: Routes.category_path(@conn, :create), submit_cta: "Add category" %>
+          <%= render "form.html", changeset: @changeset, action: Routes.category_path(@conn, :update, @category.slug), submit_cta: "Update category" %>
         </div>
       </div>
     </div>

@@ -34,6 +34,7 @@ defmodule Ressipy.Recipes.Category do
     |> validate_required([:name, :slug])
     |> validate_length(:name, max: 255)
     |> validate_length(:slug, max: 255)
+    |> unique_constraint(:slug)
   end
 
   @spec put_slug(Ecto.Changeset.t()) :: Ecto.Changeset.t()
