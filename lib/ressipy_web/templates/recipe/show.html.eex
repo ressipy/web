@@ -49,7 +49,9 @@
       <% end %>
     </div>
   </div>
-  <p class="text-sm font-medium text-gray-500">by <%= @recipe.author %></p>
+  <%= if @recipe.author do %>
+    <p class="text-sm font-medium text-gray-500">by <%= @recipe.author %></p>
+  <% end %>
 
   <h3 class="mt-4 text-sm font-bold text-gray-500">Ingredients</h3>
   <ul class="list-disc px-4">
@@ -71,6 +73,7 @@
     role="dialog"
     aria-modal="true"
     x-show="showDeleteConfirmation"
+    x-cloak
   >
     <div
       class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
