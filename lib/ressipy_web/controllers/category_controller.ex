@@ -3,6 +3,7 @@ defmodule RessipyWeb.CategoryController do
 
   use RessipyWeb, :controller
 
+  alias Ressipy.Authorization
   alias Ressipy.Recipes
   alias Ressipy.Recipes.Category
 
@@ -39,8 +40,12 @@ defmodule RessipyWeb.CategoryController do
   end
 
   def index(conn, _params) do
-    categories = Recipes.list_categories()
-    render(conn, "index.html", categories: categories)
+    assigns = [
+      can_create: Authorization.can?(conn.assigns.current_user, :create_category),
+      categories: Recipes.list_categories()
+    ]
+
+    render(conn, "index.html", assigns)
   end
 
   def new(conn, _params) do
@@ -49,8 +54,14 @@ defmodule RessipyWeb.CategoryController do
   end
 
   def show(conn, %{"slug" => slug}) do
-    category = Recipes.get_category!(slug)
-    render(conn, "show.html", category: category)
+    assigns = [
+      can_add: Authorization.can?(conn.assigns.current_user, :create_recipe),
+      can_delete: Authorization.can?(conn.assigns.current_user, :delete_category),
+      can_edit: Authorization.can?(conn.assigns.current_user, :update_category),
+      category: Recipes.get_category!(slug)
+    ]
+
+    render(conn, "show.html", assigns)
   end
 
   def update(conn, %{"slug" => slug, "category" => category_params}) do

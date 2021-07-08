@@ -3,6 +3,7 @@ defmodule RessipyWeb.RecipeController do
 
   use RessipyWeb, :controller
 
+  alias Ressipy.Authorization
   alias Ressipy.Recipes
 
   plug :require_authorization, :create_recipe when action in [:create, :new]
@@ -72,8 +73,15 @@ defmodule RessipyWeb.RecipeController do
   end
 
   def show(conn, %{"slug" => slug}) do
-    recipe = Recipes.get_recipe!(slug)
-    render(conn, "show.html", recipe: recipe)
+    user = conn.assigns.current_user
+
+    assigns = [
+      can_delete: Authorization.can?(user, :delete_recipe),
+      can_edit: Authorization.can?(user, :update_recipe),
+      recipe: Recipes.get_recipe!(slug)
+    ]
+
+    render(conn, "show.html", assigns)
   end
 
   def update(conn, %{"slug" => slug, "recipe" => recipe_params}) do

@@ -3,6 +3,8 @@
 // its own CSS file.
 import "../css/app.scss";
 
+import Alpine from "alpinejs";
+
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
 // in "webpack.config.js".
@@ -16,6 +18,7 @@ import "phoenix_html";
 import { Socket } from "phoenix";
 import topbar from "topbar";
 import { LiveSocket } from "phoenix_live_view";
+import Category from "./category";
 import Recipe from "./recipe";
 
 let csrfToken = document
@@ -37,6 +40,10 @@ liveSocket.connect();
 // >> liveSocket.enableDebug()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
-window.liveSocket = liveSocket;
 
+window.Alpine = Alpine;
+window.Category = Category;
+window.liveSocket = liveSocket;
 window.Recipe = Recipe;
+
+Alpine.start();

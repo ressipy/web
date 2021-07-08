@@ -1,7 +1,7 @@
 <ul class="divide-y divide-gray-200">
   <%= for category <- @categories do %>
-    <li>
-      <%= link category.name, to: Routes.category_path(@conn, :show, category.slug), class: "block p-4 text-lg font-regular" %>
+    <li class="hover:bg-gray-100">
+      <%= link category.name, to: Routes.category_path(@conn, :show, category.slug), class: "block p-4 text-lg font-medium" %>
     </li>
   <% end %>
 </ul>
