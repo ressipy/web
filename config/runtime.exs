@@ -8,15 +8,11 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
-  app_name =
-    System.get_env("FLY_APP_NAME") ||
-      raise "FLY_APP_NAME not available"
-
-  host = System.get_env("HOST", "#{app_name}.fly.dev")
+  host = System.get_env("HOST", "ressipy.com")
 
   config :ressipy, RessipyWeb.Endpoint,
     server: true,
-    url: [host: host, port: 80],
+    url: [host: host, port: 443],
     http: [
       port: String.to_integer(System.get_env("PORT") || "4000"),
       transport_options: [socket_opts: [:inet6]]
