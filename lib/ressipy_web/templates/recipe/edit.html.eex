@@ -1,0 +1,22 @@
+<div class="bg-white flex">
+  <div
+    class="flex flex-col md:justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 w-full"
+  >
+    <div class="mx-auto w-full max-w-sm lg:w-96">
+      <div>
+        <h2 class="mt-6 text-3xl font-extrabold text-gray-900">Edit Recipe</h2>
+      </div>
+
+      <div class="mt-8">
+        <div class="mt-6">
+          <%= render("form.html",
+                changeset: @changeset,
+                categories: @categories,
+                action: Routes.recipe_path(@conn, :update, @recipe.slug),
+                submit_cta: "Update recipe"
+              ) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

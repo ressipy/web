@@ -1,0 +1,142 @@
+<%= form_for @changeset, @action, [class: "space-y-6"], fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="rounded-md bg-red-200 p-4">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg
+            class="h-5 w-5 text-red-600"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
+        <div role="alert" class="ml-3">
+          <p class="text-sm font-medium text-red-800">
+            Something went wrong. Please check the errors below.
+          </p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div>
+    <%= label f, :name, class: "block text-sm font-medium text-gray-700" %>
+    <div class="mt-1">
+      <%= text_input f, :name, required: true, class: "appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" %>
+      <%= error_tag f, :name %>
+      <%= error_tag f, :slug %>
+    </div>
+  </div>
+
+  <div>
+    <%= label f, :category_id, "Category", class: "block text-sm font-medium text-gray-700" %>
+    <div class="mt-1">
+      <%= select f, :category_id, for_select(@categories), class: "appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" %>
+      <%= error_tag f, :category_id %>
+    </div>
+  </div>
+
+  <div>
+    <%= label f, :author, class: "block text-sm font-medium text-gray-700" %>
+    <div class="mt-1">
+      <%= text_input f, :author, class: "appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" %>
+      <%= error_tag f, :author %>
+    </div>
+  </div>
+
+  <div class="space-y-6 sm:px-6 lg:px-0 lg:col-span-9">
+    <section aria-labelledby="change_email_heading">
+      <div class="shadow sm:rounded-md sm:overflow-hidden">
+        <div class="bg-white py-6 px-4 sm:p-6">
+          <h2
+            id="ingredients_heading"
+            class="text-lg leading-6 font-medium text-gray-900"
+          >
+            Ingredients
+          </h2>
+
+          <div id="ingredientsContainer">
+            <%= inputs_for f, :ingredients, fn rg -> %>
+              <div
+                class="ingredientRow mt-6 grid grid-cols-4 gap-6"
+                data-ingredient="<%= rg.index %>"
+              >
+                <div class="col-span-1">
+                  <%= label rg, :amount, class: "block text-sm font-medium text-gray-700" %>
+                  <%= text_input rg, :amount, class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" %>
+                  <%= error_tag rg, :amount %>
+                </div>
+
+                <%= hidden_input rg, :order, value: rg.index + 1 %>
+
+                <%= inputs_for rg, :ingredient, fn g -> %>
+                  <div class="col-span-3">
+                    <%= if has_id?(g), do: hidden_input g, :id %>
+                    <%= label g, :name, class: "block text-sm font-medium text-gray-700" %>
+                    <%= text_input g, :name, class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" %>
+                    <%= error_tag g, :name %>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+          <a
+            onClick="Recipe.addIngredient()"
+            class="bg-red-600 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 cursor-pointer"
+          >
+            Add ingredient
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="space-y-6 sm:px-6 lg:px-0 lg:col-span-9">
+    <section aria-labelledby="change_email_heading">
+      <div class="shadow sm:rounded-md sm:overflow-hidden">
+        <div class="bg-white py-6 px-4 sm:p-6">
+          <h2
+            id="ingredients_heading"
+            class="text-lg leading-6 font-medium text-gray-900"
+          >
+            Instructions
+          </h2>
+
+          <div id="instructionsContainer">
+            <%= inputs_for f, :instructions, fn s -> %>
+              <div class="instructionRow mt-6">
+                <%= if has_id?(s), do: hidden_input s, :id %>
+                <%= hidden_input s, :order, value: s.index + 1 %>
+
+                <%= label s, :text, "Step #{s.index + 1}", class: "block text-sm font-medium text-gray-700" %>
+                <%= text_input s, :text, class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" %>
+                <%= error_tag s, :text %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+          <a
+            onClick="Recipe.addInstruction()"
+            class="bg-red-600 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 cursor-pointer"
+          >
+            Add step
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div>
+    <%= submit @submit_cta, class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
+  </div>
+<% end %>

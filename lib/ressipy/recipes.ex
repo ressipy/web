@@ -6,7 +6,10 @@ defmodule Ressipy.Recipes do
   import Ecto.Query
 
   alias Ressipy.Recipes.Category
+  alias Ressipy.Recipes.Ingredient
+  alias Ressipy.Recipes.Instruction
   alias Ressipy.Recipes.Recipe
+  alias Ressipy.Recipes.RecipeIngredient
   alias Ressipy.Repo
 
   @doc """
@@ -21,6 +24,19 @@ defmodule Ressipy.Recipes do
   @spec change_category(Category.t(), map) :: Ecto.Changeset.t()
   def change_category(%Category{} = category, attrs \\ %{}) do
     Category.changeset(category, attrs)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking recipe changes.
+
+  ## Examples
+
+      iex> change_recipe(recipe)
+      %Ecto.Changeset{source: %Recipe{}}
+
+  """
+  def change_recipe(%Recipe{} = recipe, attrs \\ %{}) do
+    Recipe.changeset(recipe, attrs)
   end
 
   @doc """
@@ -43,6 +59,24 @@ defmodule Ressipy.Recipes do
   end
 
   @doc """
+  Creates a recipe.
+
+  ## Examples
+
+      iex> create_recipe(%{field: value})
+      {:ok, %Recipe{}}
+
+      iex> create_recipe(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_recipe(attrs \\ %{}) do
+    %Recipe{}
+    |> Recipe.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
   Deletes a Category.
 
   ## Examples
@@ -56,6 +90,48 @@ defmodule Ressipy.Recipes do
   """
   def delete_category(%Category{} = category) do
     Repo.delete(category)
+  end
+
+  @doc """
+  Deletes a Recipe.
+
+  ## Examples
+
+      iex> delete_recipe(recipe)
+      {:ok, %Recipe{}}
+
+      iex> delete_recipe(recipe)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_recipe(%Recipe{} = recipe) do
+    Repo.delete(recipe)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` representing a brand new empty recipe.
+
+  ## Examples
+
+      iex> empty_recipe()
+      %Ecto.Changeset{source: %Recipe{}}
+  """
+  @spec empty_recipe(Category.t() | nil) :: Ecto.Changeset.t()
+  def empty_recipe(category \\ nil) do
+    category_id = if category, do: category.id, else: nil
+
+    recipe = %Recipe{
+      category_id: category_id,
+      ingredients: [
+        %RecipeIngredient{
+          order: 1,
+          ingredient: %Ingredient{}
+        }
+      ],
+      instructions: [%Instruction{order: 1}]
+    }
+
+    change_recipe(recipe)
   end
 
   @doc """
@@ -144,6 +220,24 @@ defmodule Ressipy.Recipes do
   def update_category(%Category{} = category, attrs) do
     category
     |> Category.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Updates a recipe.
+
+  ## Examples
+
+      iex> update_recipe(recipe, %{field: new_value})
+      {:ok, %Recipe{}}
+
+      iex> update_recipe(recipe, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_recipe(%Recipe{} = recipe, attrs) do
+    recipe
+    |> Recipe.changeset(attrs)
     |> Repo.update()
   end
 end

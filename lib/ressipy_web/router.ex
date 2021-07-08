@@ -39,6 +39,12 @@ defmodule RessipyWeb.Router do
     get "/categories/:slug/edit", CategoryController, :edit
     put "/categories/:slug", CategoryController, :update
     delete "/categories/:slug", CategoryController, :delete
+
+    post "/recipes", RecipeController, :create
+    get "/recipes/new", RecipeController, :new
+    get "/recipes/:slug/edit", RecipeController, :edit
+    put "/recipes/:slug", RecipeController, :update
+    delete "/recipes/:slug", RecipeController, :delete
   end
 
   scope "/", RessipyWeb do
