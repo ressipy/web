@@ -6,9 +6,9 @@ defmodule RessipyWeb.RecipeController do
   alias Ressipy.Authorization
   alias Ressipy.Recipes
 
-  plug :require_authorization, :create_recipe when action in [:create, :new]
-  plug :require_authorization, :update_recipe when action in [:edit, :update]
-  plug :require_authorization, :delete_recipe when action in [:delete]
+  plug RessipyWeb.Authorization, :create_recipe when action in [:create, :new]
+  plug RessipyWeb.Authorization, :update_recipe when action in [:edit, :update]
+  plug RessipyWeb.Authorization, :delete_recipe when action in [:delete]
 
   def create(conn, %{"recipe" => recipe_params}) do
     case Recipes.create_recipe(recipe_params) do

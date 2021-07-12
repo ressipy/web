@@ -7,9 +7,9 @@ defmodule RessipyWeb.CategoryController do
   alias Ressipy.Recipes
   alias Ressipy.Recipes.Category
 
-  plug :require_authorization, :create_category when action in [:create, :new]
-  plug :require_authorization, :delete_category when action in [:delete]
-  plug :require_authorization, :update_category when action in [:edit, :update]
+  plug RessipyWeb.Authorization, :create_category when action in [:create, :new]
+  plug RessipyWeb.Authorization, :delete_category when action in [:delete]
+  plug RessipyWeb.Authorization, :update_category when action in [:edit, :update]
 
   def create(conn, %{"category" => category_params}) do
     case Recipes.create_category(category_params) do

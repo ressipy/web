@@ -1,18 +1,17 @@
 defmodule RessipyWeb.Authorization do
   @moduledoc false
 
-  import Plug.Conn
-  import Phoenix.Controller
+  import Plug.Conn, only: [halt: 1]
+  import Phoenix.Controller, only: [put_flash: 3, redirect: 2]
 
   alias Ressipy.Authorization
   alias RessipyWeb.Router.Helpers, as: Routes
 
-  @doc """
-  A simple plug that can be used for authorization checking on routes. It
-  expects that a check has already run to ensure that a user is logged in, and
-  that a current_user struct exists within the assigns on the connection.
-  """
-  def require_authorization(conn, permission) do
+  def init(permission) do
+    permission
+  end
+
+  def call(conn, permission) do
     if Authorization.can?(conn.assigns.current_user, permission) do
       conn
     else

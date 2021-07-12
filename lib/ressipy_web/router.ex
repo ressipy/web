@@ -18,14 +18,18 @@ defmodule RessipyWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :admin do
+    plug :require_authenticated_user
+    plug RessipyWeb.Authorization, :view_admin_panel
+  end
+
   if Application.get_env(:ressipy, :include_sent_email_route?, false) do
     forward "/sent_emails", Bamboo.SentEmailViewerPlug
   end
 
-  scope "/", RessipyWeb do
-    pipe_through [:browser, :require_admin]
+  scope "/admin", RessipyWeb do
+    pipe_through [:browser, :admin]
 
-    # live "/", PageLive, :index
     live_dashboard "/dashboard", metrics: RessipyWeb.Telemetry
   end
 

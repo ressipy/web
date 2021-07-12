@@ -23,7 +23,6 @@ defmodule RessipyWeb do
 
       import Plug.Conn
       import RessipyWeb.Gettext
-      import RessipyWeb.Authorization
       alias RessipyWeb.Router.Helpers, as: Routes
     end
   end

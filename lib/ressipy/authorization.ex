@@ -20,20 +20,22 @@ defmodule Ressipy.Authorization do
   def can?(%{role: :admin}, :create_category), do: true
   def can?(%{role: :editor}, :create_category), do: true
 
-  def can?(%{role: :admin}, :delete_category), do: true
-  def can?(%{role: :editor}, :delete_category), do: true
-
-  def can?(%{role: :admin}, :update_category), do: true
-  def can?(%{role: :editor}, :update_category), do: true
-
   def can?(%{role: :admin}, :create_recipe), do: true
   def can?(%{role: :editor}, :create_recipe), do: true
+
+  def can?(%{role: :admin}, :delete_category), do: true
+  def can?(%{role: :editor}, :delete_category), do: true
 
   def can?(%{role: :admin}, :delete_recipe), do: true
   def can?(%{role: :editor}, :delete_recipe), do: true
 
+  def can?(%{role: :admin}, :update_category), do: true
+  def can?(%{role: :editor}, :update_category), do: true
+
   def can?(%{role: :admin}, :update_recipe), do: true
   def can?(%{role: :editor}, :update_recipe), do: true
+
+  def can?(%{role: :admin}, :view_admin_panel), do: true
 
   def can?(_user, _action), do: false
 end
