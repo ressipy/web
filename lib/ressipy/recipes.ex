@@ -10,6 +10,7 @@ defmodule Ressipy.Recipes do
   alias Ressipy.Recipes.Instruction
   alias Ressipy.Recipes.Recipe
   alias Ressipy.Recipes.RecipeIngredient
+  alias Ressipy.Recipes.RecipeListFilters
   alias Ressipy.Repo
 
   @doc """
@@ -206,6 +207,40 @@ defmodule Ressipy.Recipes do
   end
 
   @doc """
+  Returns a list of recipes matching the parameters given.
+
+  ## Examples
+
+  iex> list_recipes()
+  [%Recipe{}]
+
+  """
+  @spec list_recipes(RecipeListFilters.t()) :: [Recipe.t()]
+  def list_recipes(filters) do
+    query =
+      from r in Recipe,
+        as: :recipe,
+        left_join: c in assoc(r, :category),
+        as: :category,
+        left_join: s in assoc(r, :instructions),
+        as: :instructions,
+        left_join: j in assoc(r, :ingredients),
+        as: :recipe_ingredients,
+        left_join: g in assoc(j, :ingredient),
+        as: :ingredient,
+        preload: [
+          category: c,
+          ingredients: {j, ingredient: g},
+          instructions: s
+        ],
+        order_by: [j.order, s.order]
+
+    query
+    |> RecipeListFilters.apply(filters)
+    |> Repo.all()
+  end
+
+  @doc """
   Updates a category.
 
   ## Examples
@@ -239,5 +274,14 @@ defmodule Ressipy.Recipes do
     recipe
     |> Recipe.changeset(attrs)
     |> Repo.update()
+  end
+
+  @doc """
+  Validate the given filters to ensure that they can be applied to the recipe
+  list query.
+  """
+  @spec validate_filters(map) :: {:ok, RecipeListFilters.t()} | {:error, Ecto.Changeset.t()}
+  def validate_filters(params) do
+    RecipeListFilters.validate(params)
   end
 end
