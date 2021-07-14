@@ -36,6 +36,7 @@ defmodule Ressipy.MixProject do
       {:bamboo, "~> 2.2"},
       {:bamboo_phoenix, "~> 1.0"},
       {:bcrypt_elixir, "~> 2.0"},
+      {:casex, "~> 0.4.1"},
       {:ecto_psql_extras, "~> 0.2"},
       {:ecto_sql, "~> 3.4"},
       {:floki, ">= 0.27.0", only: :test},

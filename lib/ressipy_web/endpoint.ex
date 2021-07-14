@@ -50,5 +50,9 @@ defmodule RessipyWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
+
+  # convert camelCase params to snake_case
+  plug Casex.CamelCaseDecoderPlug
+
   plug RessipyWeb.Router
 end

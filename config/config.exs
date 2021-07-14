@@ -24,7 +24,9 @@ config :logger, :console,
   metadata: [:request_id]
 
 # Use Jason for JSON parsing in Phoenix
-config :phoenix, :json_library, Jason
+config :phoenix,
+  format_encoders: [json: Casex.CamelCaseEncoder],
+  json_library: Jason
 
 # Use Bamboo's local adapter for viewing sent emails in development
 config :ressipy, RessipyMailer, adapter: Bamboo.LocalAdapter
