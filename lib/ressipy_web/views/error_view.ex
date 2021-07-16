@@ -1,12 +1,19 @@
 defmodule RessipyWeb.ErrorView do
   use RessipyWeb, :view
 
-  def render("400.json", changeset) do
-    Ecto.Changeset.traverse_errors(changeset, fn {msg, opts} ->
-      Enum.reduce(opts, msg, fn {key, value}, acc ->
-        String.replace(acc, "%{#{key}}", to_string(value))
+  def render("400.json", %{changeset: changeset}) do
+    errors =
+      Ecto.Changeset.traverse_errors(changeset, fn {msg, opts} ->
+        Enum.reduce(opts, msg, fn {key, value}, acc ->
+          String.replace(acc, "%{#{key}}", to_string(value))
+        end)
       end)
-    end)
+
+    %{error: %{type: :bad_request, description: errors}}
+  end
+
+  def render("404.json", _) do
+    %{error: %{type: :not_found, description: "The specified resource could not be found"}}
   end
 
   # If you want to customize a particular status code

@@ -6,11 +6,11 @@ defmodule Ressipy.Recipes do
   import Ecto.Query
 
   alias Ressipy.Recipes.Category
+  alias Ressipy.Recipes.DataFilters
   alias Ressipy.Recipes.Ingredient
   alias Ressipy.Recipes.Instruction
   alias Ressipy.Recipes.Recipe
   alias Ressipy.Recipes.RecipeIngredient
-  alias Ressipy.Recipes.RecipeListFilters
   alias Ressipy.Repo
 
   @doc """
@@ -163,7 +163,38 @@ defmodule Ressipy.Recipes do
   @doc """
   Gets a single recipe.
 
-  Raises `Ecto.NoResultsError` if the Recipe does not exist.
+  Returns `nil` if the Recipe does not exist.
+
+  ## Examples
+
+      iex> get_recipe("chicken-parmesan")
+      %Recipe{}
+
+      iex> get_recipe("cake")
+      nil
+
+  """
+  def get_recipe(slug) do
+    query =
+      from r in Recipe,
+        left_join: c in assoc(r, :category),
+        left_join: s in assoc(r, :instructions),
+        left_join: j in assoc(r, :ingredients),
+        left_join: g in assoc(j, :ingredient),
+        preload: [
+          category: c,
+          ingredients: {j, ingredient: g},
+          instructions: s
+        ],
+        order_by: [j.order, s.order]
+
+    Repo.get_by(query, slug: slug)
+  end
+
+  @doc """
+  Gets a single recipe.
+
+  Raises `Ecto.NoResultsError` if the recipe does not exist.
 
   ## Examples
 
@@ -174,6 +205,7 @@ defmodule Ressipy.Recipes do
       ** (Ecto.NoResultsError)
 
   """
+  @spec get_recipe!(String.t()) :: Recipe.t()
   def get_recipe!(slug) do
     query =
       from r in Recipe,
@@ -200,10 +232,13 @@ defmodule Ressipy.Recipes do
       [%Category{}, ...]
 
   """
-  @spec list_categories :: [Category.t()]
-  def list_categories do
-    query = from c in Category, order_by: c.name
-    Repo.all(query)
+  @spec list_categories(DataFilters.t()) :: [Category.t()]
+  def list_categories(filters \\ %DataFilters{}) do
+    query = from c in Category, as: :category, order_by: c.name
+
+    query
+    |> DataFilters.apply(filters, :category)
+    |> Repo.all()
   end
 
   @doc """
@@ -215,8 +250,8 @@ defmodule Ressipy.Recipes do
   [%Recipe{}]
 
   """
-  @spec list_recipes(RecipeListFilters.t()) :: [Recipe.t()]
-  def list_recipes(filters) do
+  @spec list_recipes(DataFilters.t()) :: [Recipe.t()]
+  def list_recipes(filters \\ %DataFilters{}) do
     query =
       from r in Recipe,
         as: :recipe,
@@ -233,10 +268,10 @@ defmodule Ressipy.Recipes do
           ingredients: {j, ingredient: g},
           instructions: s
         ],
-        order_by: [j.order, s.order]
+        order_by: [r.name, j.order, s.order]
 
     query
-    |> RecipeListFilters.apply(filters)
+    |> DataFilters.apply(filters, :recipe)
     |> Repo.all()
   end
 
@@ -277,11 +312,11 @@ defmodule Ressipy.Recipes do
   end
 
   @doc """
-  Validate the given filters to ensure that they can be applied to the recipe
-  list query.
+  Validate the given filters to ensure that they can be applied to the
+  appropriate queries.
   """
-  @spec validate_filters(map) :: {:ok, RecipeListFilters.t()} | {:error, Ecto.Changeset.t()}
+  @spec validate_filters(map) :: {:ok, DataFilters.t()} | {:error, Ecto.Changeset.t()}
   def validate_filters(params) do
-    RecipeListFilters.validate(params)
+    DataFilters.validate(params)
   end
 end

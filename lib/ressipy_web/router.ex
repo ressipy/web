@@ -67,7 +67,8 @@ defmodule RessipyWeb.Router do
     get "/categories", CategoryController, :index
     get "/categories/:slug", CategoryController, :show
 
-    get "/recipes", RecipeController, :index
+    get "/data", DataController, :index
+
     get "/recipes/:slug", RecipeController, :show
   end
 

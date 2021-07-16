@@ -5,6 +5,8 @@ defmodule RessipyWeb.Api.RecipeController do
 
   alias Ressipy.Recipes
 
+  action_fallback RessipyWeb.Api.FallbackController
+
   def index(conn, params) do
     with {:ok, filters} <- Recipes.validate_filters(params) do
       recipes = Recipes.list_recipes(filters)
@@ -13,7 +15,8 @@ defmodule RessipyWeb.Api.RecipeController do
   end
 
   def show(conn, %{"slug" => slug}) do
-    recipe = Recipes.get_recipe!(slug)
-    render(conn, "show.json", recipe: recipe)
+    with recipe when not is_nil(recipe) <- Recipes.get_recipe(slug) do
+      render(conn, "show.json", recipe: recipe)
+    end
   end
 end
