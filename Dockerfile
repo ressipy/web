@@ -1,7 +1,7 @@
 ###
 ### Fist Stage - Building the Release
 ###
-FROM hexpm/elixir:1.11.2-erlang-23.3.2-alpine-3.13.3 AS elixir-build
+FROM elixir:1.12-alpine AS elixir-build
 
 # install build dependencies
 RUN apk add --no-cache build-base
@@ -73,8 +73,8 @@ RUN mix do phx.digest, release
 ###
 ### Fourth Stage - Setup the Runtime Environment
 ###
-FROM alpine:3.13.3 AS app
-RUN apk add --no-cache openssl ncurses-libs
+FROM alpine:3.14 AS app
+RUN apk add --no-cache libstdc++ openssl ncurses-libs
 
 WORKDIR /app
 
