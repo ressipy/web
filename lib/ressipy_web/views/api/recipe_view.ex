@@ -1,7 +1,7 @@
 defmodule RessipyWeb.Api.RecipeView do
   @moduledoc false
 
-  use RessipyWeb, :view
+  use RessipyWeb, :api_view
 
   def render("index.json", %{recipes: recipes}) do
     %{

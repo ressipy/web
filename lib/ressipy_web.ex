@@ -27,6 +27,13 @@ defmodule RessipyWeb do
     end
   end
 
+  def api_view do
+    quote do
+      import RessipyWeb.ErrorHelpers
+      import RessipyWeb.Gettext
+    end
+  end
+
   def view do
     quote do
       use Phoenix.View,
@@ -39,6 +46,9 @@ defmodule RessipyWeb do
 
       # Include shared imports and aliases for views
       unquote(view_helpers())
+
+      # Import the meta tag renderer
+      import RessipyWeb.MetaTags, only: [render_meta_tags: 1]
     end
   end
 

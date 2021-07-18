@@ -1,7 +1,7 @@
 defmodule RessipyWeb.Api.DataView do
   @moduledoc false
 
-  use RessipyWeb, :view
+  use RessipyWeb, :api_view
 
   def render("index.json", assigns) do
     %{

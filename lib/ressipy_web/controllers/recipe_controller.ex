@@ -5,6 +5,7 @@ defmodule RessipyWeb.RecipeController do
 
   alias Ressipy.Authorization
   alias Ressipy.Recipes
+  alias RessipyWeb.MetaTags
 
   plug RessipyWeb.Authorization, :create_recipe when action in [:create, :new]
   plug RessipyWeb.Authorization, :update_recipe when action in [:edit, :update]
@@ -74,11 +75,19 @@ defmodule RessipyWeb.RecipeController do
 
   def show(conn, %{"slug" => slug}) do
     user = conn.assigns.current_user
+    recipe = Recipes.get_recipe!(slug)
+
+    meta_tags = %MetaTags{
+      title: recipe.name,
+      url: Routes.recipe_url(conn, :show, slug)
+    }
 
     assigns = [
       can_delete: Authorization.can?(user, :delete_recipe),
       can_edit: Authorization.can?(user, :update_recipe),
-      recipe: Recipes.get_recipe!(slug)
+      meta_tags: meta_tags,
+      page_title: "#{recipe.name} Recipe | Ressipy",
+      recipe: recipe
     ]
 
     render(conn, "show.html", assigns)

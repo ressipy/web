@@ -1,7 +1,7 @@
 defmodule RessipyWeb.Api.CategoryView do
   @moduledoc false
 
-  use RessipyWeb, :view
+  use RessipyWeb, :api_view
 
   def render("index.json", %{categories: categories}) do
     %{
