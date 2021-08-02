@@ -10,6 +10,13 @@ defmodule RessipyWeb.Api.FallbackController do
     |> render(:"400", changeset: changeset)
   end
 
+  def call(conn, :invalid_login) do
+    conn
+    |> put_status(:forbidden)
+    |> put_view(RessipyWeb.ErrorView)
+    |> render(:"401", error: :invalid_login)
+  end
+
   def call(conn, nil) do
     conn
     |> put_status(:not_found)

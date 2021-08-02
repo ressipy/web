@@ -70,6 +70,8 @@ defmodule RessipyWeb.Router do
     get "/data", DataController, :index
 
     get "/recipes/:slug", RecipeController, :show
+
+    post "/users/tokens", UserTokenController, :create
   end
 
   ## Authentication routes
