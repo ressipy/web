@@ -63,6 +63,12 @@ defmodule RessipyWeb.Router do
   ## API routes
 
   scope "/api", RessipyWeb.Api do
+    pipe_through [:api, :require_authenticated_user]
+
+    post "/categories", CategoryController, :create
+  end
+
+  scope "/api", RessipyWeb.Api do
     pipe_through [:api]
 
     get "/categories", CategoryController, :index
@@ -73,10 +79,6 @@ defmodule RessipyWeb.Router do
     get "/recipes/:slug", RecipeController, :show
 
     post "/users/tokens", UserTokenController, :create
-  end
-
-  scope "/api", RessipyWeb.Api do
-    pipe_through [:api, :require_authenticated_user]
   end
 
   ## Authentication routes

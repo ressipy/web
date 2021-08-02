@@ -7,6 +7,14 @@ defmodule RessipyWeb.Api.CategoryController do
 
   action_fallback RessipyWeb.Api.FallbackController
 
+  plug RessipyWeb.Authorization, :create_category when action in [:create]
+
+  def create(conn, %{"category" => category_params}) do
+    with {:ok, category} <- Recipes.create_category(category_params) do
+      render(conn, :show, category: category)
+    end
+  end
+
   def index(conn, params) do
     with {:ok, filters} <- Recipes.validate_filters(params) do
       categories = Recipes.list_categories(filters)
