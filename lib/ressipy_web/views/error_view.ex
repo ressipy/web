@@ -16,6 +16,10 @@ defmodule RessipyWeb.ErrorView do
     %{error: %{type: :unauthenticated, description: "Invalid email or password"}}
   end
 
+  def render("401.json", _) do
+    %{error: %{type: :unauthenticated, description: "You must provide valid credentials."}}
+  end
+
   def render("404.json", _) do
     %{error: %{type: :not_found, description: "The specified resource could not be found"}}
   end

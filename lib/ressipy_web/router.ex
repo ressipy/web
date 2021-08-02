@@ -16,6 +16,7 @@ defmodule RessipyWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_api_user
   end
 
   pipeline :admin do
@@ -72,6 +73,10 @@ defmodule RessipyWeb.Router do
     get "/recipes/:slug", RecipeController, :show
 
     post "/users/tokens", UserTokenController, :create
+  end
+
+  scope "/api", RessipyWeb.Api do
+    pipe_through [:api, :require_authenticated_user]
   end
 
   ## Authentication routes

@@ -7,9 +7,8 @@ defmodule RessipyWeb.UserAuth do
   alias Ressipy.Accounts
   alias RessipyWeb.Router.Helpers, as: Routes
 
-  # Make the remember me cookie valid for 60 days.
-  # If you want bump or reduce this value, also change
-  # the token expiry itself in UserToken.
+  # Make the remember me cookie valid for 60 days.  If you want bump or reduce
+  # this value, also change the token expiry itself in UserToken.
   @max_age 60 * 60 * 24 * 60
   @remember_me_cookie "_ressipy_web_user_remember_me"
   @remember_me_options [sign: true, max_age: @max_age, same_site: "Lax"]
@@ -17,14 +16,12 @@ defmodule RessipyWeb.UserAuth do
   @doc """
   Logs the user in.
 
-  It renews the session ID and clears the whole session
-  to avoid fixation attacks. See the renew_session
-  function to customize this behaviour.
+  It renews the session ID and clears the whole session to avoid fixation
+  attacks. See the renew_session function to customize this behaviour.
 
-  It also sets a `:live_socket_id` key in the session,
-  so LiveView sessions are identified and automatically
-  disconnected on log out. The line can be safely removed
-  if you are not using LiveView.
+  It also sets a `:live_socket_id` key in the session, so LiveView sessions are
+  identified and automatically disconnected on log out. The line can be safely
+  removed if you are not using LiveView.
   """
   def log_in_user(conn, user, params \\ %{}) do
     token = Accounts.generate_user_session_token(user)
@@ -46,11 +43,10 @@ defmodule RessipyWeb.UserAuth do
     conn
   end
 
-  # This function renews the session ID and erases the whole
-  # session to avoid fixation attacks. If there is any data
-  # in the session you may want to preserve after log in/log out,
-  # you must explicitly fetch the session data before clearing
-  # and then immediately set it after clearing, for example:
+  # This function renews the session ID and erases the whole session to avoid
+  # fixation attacks. If there is any data in the session you may want to
+  # preserve after log in/log out, you must explicitly fetch the session data
+  # before clearing and then immediately set it after clearing, for example:
   #
   #     defp renew_session(conn) do
   #       preferred_locale = get_session(conn, :preferred_locale)
@@ -87,8 +83,25 @@ defmodule RessipyWeb.UserAuth do
   end
 
   @doc """
-  Authenticates the user by looking into the session
-  and remember me token.
+  Authenticates the user by looking into the Authorization header.
+  """
+  def fetch_api_user(conn, _opts) do
+    token = get_header_token(conn)
+    user = token && Accounts.get_user_by_session_token(token)
+    assign(conn, :current_user, user)
+  end
+
+  defp get_header_token(conn) do
+    with "Bearer " <> token <- conn |> get_req_header("authorization") |> List.first(),
+         {:ok, decoded} <- Base.decode64(token, padding: false) do
+      decoded
+    else
+      _ -> nil
+    end
+  end
+
+  @doc """
+  Authenticates the user by looking into the session and remember me token.
   """
   def fetch_current_user(conn, _opts) do
     {user_token, conn} = ensure_user_token(conn)
@@ -126,18 +139,15 @@ defmodule RessipyWeb.UserAuth do
   @doc """
   Used for routes that require the user to be authenticated.
 
-  If you want to enforce the user email is confirmed before
-  they use the application at all, here would be a good place.
+  If you want to enforce the user email is confirmed before they use the
+  application at all, here would be a good place.
   """
   def require_authenticated_user(conn, _opts) do
     if conn.assigns[:current_user] do
       conn
     else
-      conn
-      |> put_flash(:error, "You must log in to access this page.")
-      |> maybe_store_return_to()
-      |> redirect(to: Routes.user_session_path(conn, :new))
-      |> halt()
+      format = get_format(conn)
+      put_auth_error(conn, format)
     end
   end
 
@@ -146,6 +156,22 @@ defmodule RessipyWeb.UserAuth do
   end
 
   defp maybe_store_return_to(conn), do: conn
+
+  defp put_auth_error(conn, "json") do
+    conn
+    |> put_status(:unauthorized)
+    |> put_view(RessipyWeb.ErrorView)
+    |> render(:"401")
+    |> halt()
+  end
+
+  defp put_auth_error(conn, _) do
+    conn
+    |> put_flash(:error, "You must log in to access this page.")
+    |> maybe_store_return_to()
+    |> redirect(to: Routes.user_session_path(conn, :new))
+    |> halt()
+  end
 
   defp signed_in_path(_conn), do: "/"
 end
