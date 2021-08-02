@@ -8,11 +8,19 @@ defmodule RessipyWeb.Api.CategoryController do
   action_fallback RessipyWeb.Api.FallbackController
 
   plug RessipyWeb.Authorization, :create_category when action in [:create]
+  plug RessipyWeb.Authorization, :delete_category when action in [:delete]
 
   def create(conn, %{"category" => category_params}) do
     with {:ok, category} <- Recipes.create_category(category_params) do
       render(conn, :show, category: category)
     end
+  end
+
+  def delete(conn, %{"slug" => slug}) do
+    category = Recipes.get_category!(slug)
+    {:ok, _category} = Recipes.delete_category(category)
+
+    render(conn, :show, category: category)
   end
 
   def index(conn, params) do

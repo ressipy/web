@@ -66,6 +66,7 @@ defmodule RessipyWeb.Router do
     pipe_through [:api, :require_authenticated_user]
 
     post "/categories", CategoryController, :create
+    delete "/categories/:slug", CategoryController, :delete
   end
 
   scope "/api", RessipyWeb.Api do
