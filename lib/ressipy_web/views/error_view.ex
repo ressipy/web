@@ -20,6 +20,16 @@ defmodule RessipyWeb.ErrorView do
     %{error: %{type: :not_found, description: "The specified resource could not be found"}}
   end
 
+  def render("429.json", _) do
+    %{
+      error: %{
+        type: :too_many_requests,
+        description:
+          "You have attempted this action too many times. Please wait before trying again."
+      }
+    }
+  end
+
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.
   # def render("500.html", _assigns) do

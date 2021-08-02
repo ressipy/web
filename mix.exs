@@ -41,6 +41,8 @@ defmodule Ressipy.MixProject do
       {:ecto_sql, "~> 3.4"},
       {:floki, ">= 0.27.0", only: :test},
       {:gettext, "~> 0.11"},
+      {:hammer, "~> 6.0"},
+      {:hammer_backend_redis, "~> 6.1"},
       {:jason, "~> 1.0"},
       {:phoenix, "~> 1.5.8"},
       {:phoenix_ecto, "~> 4.1"},

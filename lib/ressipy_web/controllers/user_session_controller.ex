@@ -11,10 +11,18 @@ defmodule RessipyWeb.UserSessionController do
   def create(conn, %{"user" => user_params}) do
     %{"email" => email, "password" => password} = user_params
 
-    if user = Accounts.get_user_by_email_and_password(email, password) do
-      UserAuth.log_in_user(conn, user, user_params)
-    else
-      render(conn, "new.html", error_message: "Invalid email or password")
+    case Accounts.get_user_by_email_and_password(email, password) do
+      :invalid_login ->
+        render(conn, "new.html", error_message: "Invalid email or password")
+
+      :too_many_attempts ->
+        message =
+          "Your account has reached the maximum number of failed login attempts and has been temporarily locked. Please try again later."
+
+        render(conn, "new.html", error_message: message)
+
+      user ->
+        UserAuth.log_in_user(conn, user, user_params)
     end
   end
 

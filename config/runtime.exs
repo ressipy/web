@@ -41,4 +41,14 @@ if config_env() == :prod do
   config :ressipy, RessipyMailer,
     adapter: Bamboo.SendGridAdapter,
     api_key: sendgrid_api_key
+
+  redis_url =
+    System.get_env("FLY_REDIS_CACHE_URL") ||
+      raise """
+      environment variable FLY_REDIS_CACHE_URL is missing.
+      For example: redis://USER:PASS@HOST:PORT
+      """
+
+  hammer_redis_opts = [expiry_ms: 60_000 * 60 * 2, redis_url: redis_url]
+  config :hammer, backend: {Hammer.Backend.Redis, hammer_redis_opts}
 end

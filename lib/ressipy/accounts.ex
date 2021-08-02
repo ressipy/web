@@ -4,8 +4,9 @@ defmodule Ressipy.Accounts do
   """
 
   import Ecto.Query, warn: false
-  alias Ressipy.Repo
   alias Ressipy.Accounts.{User, UserToken, UserNotifier}
+  alias Ressipy.RateLimiting
+  alias Ressipy.Repo
 
   ## Database getters
 
@@ -34,13 +35,22 @@ defmodule Ressipy.Accounts do
       %User{}
 
       iex> get_user_by_email_and_password("foo@example.com", "invalid_password")
-      nil
+      :invalid_login
+
+      iex> get_user_by_email_and_password("foo@example.com", "another_guess")
+      :too_many_attempts
 
   """
   def get_user_by_email_and_password(email, password)
       when is_binary(email) and is_binary(password) do
-    user = Repo.get_by(User, email: email)
-    if User.valid_password?(user, password), do: user
+    case RateLimiting.check_rate(:attempt_login, %{email: email}) do
+      :allow ->
+        user = Repo.get_by(User, email: email)
+        if User.valid_password?(user, password), do: user, else: :invalid_login
+
+      :deny ->
+        :too_many_attempts
+    end
   end
 
   @doc """
