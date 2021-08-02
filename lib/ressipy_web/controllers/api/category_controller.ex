@@ -9,6 +9,7 @@ defmodule RessipyWeb.Api.CategoryController do
 
   plug RessipyWeb.Authorization, :create_category when action in [:create]
   plug RessipyWeb.Authorization, :delete_category when action in [:delete]
+  plug RessipyWeb.Authorization, :update_category when action in [:update]
 
   def create(conn, %{"category" => category_params}) do
     with {:ok, category} <- Recipes.create_category(category_params) do
@@ -33,5 +34,13 @@ defmodule RessipyWeb.Api.CategoryController do
   def show(conn, %{"slug" => slug}) do
     category = Recipes.get_category!(slug)
     render(conn, "show.json", category: category)
+  end
+
+  def update(conn, %{"slug" => slug, "category" => category_params}) do
+    category = Recipes.get_category!(slug)
+
+    with {:ok, category} <- Recipes.update_category(category, category_params) do
+      render(conn, :show, category: category)
+    end
   end
 end
