@@ -21,7 +21,7 @@ defmodule Ressipy.Recipes.Category do
     field :name, :string
     field :slug, :string
 
-    has_many :recipes, Recipe
+    has_many :recipes, Recipe, foreign_key: :category_slug, references: :slug
 
     timestamps()
   end

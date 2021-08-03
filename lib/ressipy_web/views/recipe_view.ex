@@ -5,7 +5,7 @@ defmodule RessipyWeb.RecipeView do
 
   @spec for_select([Ressipy.Recipes.Category.t()]) :: [{String.t(), integer}]
   def for_select(categories) do
-    Enum.map(categories, &{&1.name, &1.id})
+    Enum.map(categories, &{&1.name, &1.slug})
   end
 
   @spec has_id?(Phoenix.HTML.Form.t()) :: boolean()

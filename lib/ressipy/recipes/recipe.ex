@@ -28,8 +28,7 @@ defmodule Ressipy.Recipes.Recipe do
     field :name, :string
     field :slug, :string
 
-    # TODO: Check if the foreign_key option is necessary
-    belongs_to :category, Category, foreign_key: :category_id
+    belongs_to :category, Category, foreign_key: :category_slug, references: :slug, type: :string
     has_many :ingredients, RecipeIngredient
     has_many :instructions, Instruction
 
@@ -39,11 +38,11 @@ defmodule Ressipy.Recipes.Recipe do
   @spec changeset(t, map) :: Ecto.Changeset.t()
   def changeset(%__MODULE__{} = recipe, attrs) do
     recipe
-    |> cast(attrs, [:name, :author, :default_image, :category_id])
+    |> cast(attrs, [:name, :author, :default_image, :category_slug])
     |> cast_assoc(:instructions, required: true, with: &Instruction.changeset/2)
     |> cast_assoc(:ingredients, required: true, with: &RecipeIngredient.changeset/2)
     |> put_slug()
-    |> validate_required([:name, :category_id])
+    |> validate_required([:name, :category_slug])
     |> validate_length(:author, max: 255)
     |> validate_length(:default_image, max: 255)
     |> validate_length(:name, max: 255)

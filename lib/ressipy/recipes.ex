@@ -119,10 +119,10 @@ defmodule Ressipy.Recipes do
   """
   @spec empty_recipe(Category.t() | nil) :: Ecto.Changeset.t()
   def empty_recipe(category \\ nil) do
-    category_id = if category, do: category.id, else: nil
+    category_slug = if category, do: category.slug, else: nil
 
     recipe = %Recipe{
-      category_id: category_id,
+      category_slug: category_slug,
       ingredients: [
         %RecipeIngredient{
           order: 1,
