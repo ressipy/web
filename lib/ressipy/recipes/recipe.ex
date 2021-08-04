@@ -46,6 +46,7 @@ defmodule Ressipy.Recipes.Recipe do
     |> validate_length(:author, max: 255)
     |> validate_length(:default_image, max: 255)
     |> validate_length(:name, max: 255)
+    |> foreign_key_constraint(:category_slug)
     |> unique_constraint(:slug)
   end
 

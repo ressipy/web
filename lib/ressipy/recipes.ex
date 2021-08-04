@@ -276,6 +276,19 @@ defmodule Ressipy.Recipes do
   end
 
   @doc """
+  Loads the category for a recipe.
+
+  ## Examples
+
+      iex> load_category(%Recipe{})
+      %Recipe{category: %Category{}}
+
+  """
+  def load_category(%Recipe{} = recipe) do
+    Repo.preload(recipe, :category)
+  end
+
+  @doc """
   Updates a category.
 
   ## Examples
