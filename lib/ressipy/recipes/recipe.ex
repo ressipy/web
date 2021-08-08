@@ -30,7 +30,7 @@ defmodule Ressipy.Recipes.Recipe do
 
     belongs_to :category, Category, foreign_key: :category_slug, references: :slug, type: :string
     has_many :ingredients, RecipeIngredient
-    has_many :instructions, Instruction
+    embeds_many :instructions, Instruction, on_replace: :delete
 
     timestamps()
   end
@@ -39,7 +39,7 @@ defmodule Ressipy.Recipes.Recipe do
   def changeset(%__MODULE__{} = recipe, attrs) do
     recipe
     |> cast(attrs, [:name, :author, :default_image, :category_slug])
-    |> cast_assoc(:instructions, required: true, with: &Instruction.changeset/2)
+    |> cast_embed(:instructions, required: true, with: &Instruction.changeset/2)
     |> cast_assoc(:ingredients, required: true, with: &RecipeIngredient.changeset/2)
     |> put_slug()
     |> validate_required([:name, :category_slug])

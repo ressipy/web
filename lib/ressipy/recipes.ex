@@ -129,7 +129,7 @@ defmodule Ressipy.Recipes do
           ingredient: %Ingredient{}
         }
       ],
-      instructions: [%Instruction{order: 1}]
+      instructions: [%Instruction{}]
     }
 
     change_recipe(recipe)
@@ -178,15 +178,13 @@ defmodule Ressipy.Recipes do
     query =
       from r in Recipe,
         left_join: c in assoc(r, :category),
-        left_join: s in assoc(r, :instructions),
         left_join: j in assoc(r, :ingredients),
         left_join: g in assoc(j, :ingredient),
         preload: [
           category: c,
-          ingredients: {j, ingredient: g},
-          instructions: s
+          ingredients: {j, ingredient: g}
         ],
-        order_by: [j.order, s.order]
+        order_by: [j.order]
 
     Repo.get_by(query, slug: slug)
   end
@@ -210,15 +208,13 @@ defmodule Ressipy.Recipes do
     query =
       from r in Recipe,
         left_join: c in assoc(r, :category),
-        left_join: s in assoc(r, :instructions),
         left_join: j in assoc(r, :ingredients),
         left_join: g in assoc(j, :ingredient),
         preload: [
           category: c,
-          ingredients: {j, ingredient: g},
-          instructions: s
+          ingredients: {j, ingredient: g}
         ],
-        order_by: [j.order, s.order]
+        order_by: [j.order]
 
     Repo.get_by!(query, slug: slug)
   end
@@ -257,18 +253,15 @@ defmodule Ressipy.Recipes do
         as: :recipe,
         left_join: c in assoc(r, :category),
         as: :category,
-        left_join: s in assoc(r, :instructions),
-        as: :instructions,
         left_join: j in assoc(r, :ingredients),
         as: :recipe_ingredients,
         left_join: g in assoc(j, :ingredient),
         as: :ingredient,
         preload: [
           category: c,
-          ingredients: {j, ingredient: g},
-          instructions: s
+          ingredients: {j, ingredient: g}
         ],
-        order_by: [r.name, j.order, s.order]
+        order_by: [r.name, j.order]
 
     query
     |> DataFilters.apply(filters, :recipe)

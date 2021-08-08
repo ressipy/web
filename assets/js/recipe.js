@@ -60,13 +60,6 @@ Recipe.addInstruction = () => {
   let row = document.createElement("div");
   row.className = "instructionRow mt-6";
 
-  let orderElement = document.createElement("input");
-  orderElement.id = `recipe_instructions_${key}_order`;
-  orderElement.name = `recipe[instructions][${key}][order]`;
-  orderElement.type = "hidden";
-  orderElement.value = key + 1;
-  row.append(orderElement);
-
   let label = document.createElement("label");
   label.className = "block text-sm font-medium text-gray-700";
   label.htmlFor = `recipe_instructions_${key}_text`;
