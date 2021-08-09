@@ -29,7 +29,7 @@ defmodule RessipyWeb.Api.DataView do
   defp ingredient_json(ingredient) do
     %{
       amount: ingredient.amount,
-      name: ingredient.ingredient.name
+      name: ingredient.name
     }
   end
 

@@ -56,7 +56,7 @@
   <h3 class="mt-4 text-sm font-bold text-gray-500">Ingredients</h3>
   <ul class="list-disc px-4">
     <%= for ingredient <- @recipe.ingredients do %>
-      <li><%= ingredient.amount %> <%= ingredient.ingredient.name %></li>
+      <li><%= ingredient.amount %> <%= ingredient.name %></li>
     <% end %>
   </ul>
 

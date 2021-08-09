@@ -8,7 +8,7 @@ defmodule Ressipy.Recipes.Recipe do
 
   alias Ressipy.Recipes.Category
   alias Ressipy.Recipes.Instruction
-  alias Ressipy.Recipes.RecipeIngredient
+  alias Ressipy.Recipes.Ingredient
   alias Ressipy.Util
 
   @type t :: %__MODULE__{
@@ -29,7 +29,7 @@ defmodule Ressipy.Recipes.Recipe do
     field :slug, :string
 
     belongs_to :category, Category, foreign_key: :category_slug, references: :slug, type: :string
-    has_many :ingredients, RecipeIngredient
+    embeds_many :ingredients, Ingredient, on_replace: :delete
     embeds_many :instructions, Instruction, on_replace: :delete
 
     timestamps()
@@ -40,7 +40,7 @@ defmodule Ressipy.Recipes.Recipe do
     recipe
     |> cast(attrs, [:name, :author, :default_image, :category_slug])
     |> cast_embed(:instructions, required: true, with: &Instruction.changeset/2)
-    |> cast_assoc(:ingredients, required: true, with: &RecipeIngredient.changeset/2)
+    |> cast_embed(:ingredients, required: true, with: &Ingredient.changeset/2)
     |> put_slug()
     |> validate_required([:name, :category_slug])
     |> validate_length(:author, max: 255)

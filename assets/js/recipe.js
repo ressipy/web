@@ -24,27 +24,20 @@ Recipe.addIngredient = () => {
   amountInput.type = "text";
   amountContainer.appendChild(amountInput);
 
-  let orderElement = document.createElement("input");
-  orderElement.id = `recipe_ingredients_${key}_order`;
-  orderElement.name = `recipe[ingredients][${key}][order]`;
-  orderElement.type = "hidden";
-  orderElement.value = key + 1;
-  amountInput.append(orderElement);
-
   let nameContainer = document.createElement("div");
   nameContainer.className = "col-span-3";
 
   let nameLabel = document.createElement("label");
   nameLabel.className = "block text-sm font-medium text-gray-700";
-  nameLabel.htmlFor = `recipe_ingredients_${key}_ingredient_name`;
+  nameLabel.htmlFor = `recipe_ingredients_${key}_name`;
   nameLabel.innerText = "Name";
   nameContainer.appendChild(nameLabel);
 
   let nameInput = document.createElement("input");
   nameInput.className =
     "mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm";
-  nameInput.id = `recipe_ingredients_${key}_ingredient_name`;
-  nameInput.name = `recipe[ingredients][${key}][ingredient][name]`;
+  nameInput.id = `recipe_ingredients_${key}_name`;
+  nameInput.name = `recipe[ingredients][${key}][name]`;
   nameInput.type = "text";
   nameContainer.appendChild(nameInput);
 
