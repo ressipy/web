@@ -8,6 +8,7 @@ defmodule RessipyWeb.Api.RecipeController do
   action_fallback RessipyWeb.Api.FallbackController
 
   plug RessipyWeb.Authorization, :create_recipe when action in [:create]
+  plug RessipyWeb.Authorization, :update_recipe when action in [:update]
 
   def create(conn, %{"recipe" => recipe_params}) do
     with {:ok, recipe} <- Recipes.create_recipe(recipe_params) do
@@ -26,6 +27,14 @@ defmodule RessipyWeb.Api.RecipeController do
   def show(conn, %{"slug" => slug}) do
     with recipe when not is_nil(recipe) <- Recipes.get_recipe(slug) do
       render(conn, "show.json", recipe: recipe)
+    end
+  end
+
+  def update(conn, %{"slug" => slug, "recipe" => recipe_params}) do
+    recipe = Recipes.get_recipe!(slug)
+
+    with {:ok, recipe} <- Recipes.update_recipe(recipe, recipe_params) do
+      render(conn, :show, recipe: recipe)
     end
   end
 end
