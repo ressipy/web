@@ -71,6 +71,7 @@ defmodule RessipyWeb.Router do
 
     post "/recipes", RecipeController, :create
     put "/recipes/:slug", RecipeController, :update
+    delete "/recipes/:slug", RecipeController, :delete
   end
 
   scope "/api", RessipyWeb.Api do
