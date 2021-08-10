@@ -10,6 +10,8 @@ defmodule RessipyWeb.Api.UserTokenController do
     %{"email" => email, "password" => password} = user_params
 
     with %{} = user <- Accounts.get_user_by_email_and_password(email, password) do
+      Logger.metadata(user_id: user.id)
+
       token =
         user
         |> Accounts.generate_user_session_token()

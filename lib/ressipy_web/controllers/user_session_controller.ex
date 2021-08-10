@@ -22,6 +22,7 @@ defmodule RessipyWeb.UserSessionController do
         render(conn, "new.html", error_message: message)
 
       user ->
+        Logger.metadata(user_id: user.id)
         UserAuth.log_in_user(conn, user, user_params)
     end
   end
