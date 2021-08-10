@@ -4,6 +4,16 @@ defmodule Ressipy.Authorization do
   application.
   """
 
+  @permissions [
+    :create_category,
+    :create_recipe,
+    :delete_category,
+    :delete_recipe,
+    :update_category,
+    :update_recipe,
+    :view_admin_panel
+  ]
+
   @doc """
   Receives a user struct and a permission atom and returns whether or not the
   given user is authorized to perform the given action.
@@ -38,4 +48,18 @@ defmodule Ressipy.Authorization do
   def can?(%{role: :admin}, :view_admin_panel), do: true
 
   def can?(_user, _action), do: false
+
+  @doc """
+  Receives a user struct and returns a list of the actions that user is
+  permitted to take.
+
+  ## Examples
+
+      iex> permissions(user)
+      [:create_category, :create_recipe, ...]
+
+  """
+  def permissions(user) do
+    Enum.filter(@permissions, &can?(user, &1))
+  end
 end

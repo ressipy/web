@@ -53,6 +53,7 @@ defmodule Ressipy.MixProject do
       {:phx_gen_auth, "~> 0.7", only: [:dev], runtime: false},
       {:plug_cowboy, "~> 2.0"},
       {:postgrex, ">= 0.0.0"},
+      {:recase, "~> 0.7.0"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"}
     ]

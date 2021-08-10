@@ -3,6 +3,7 @@ defmodule RessipyWeb.Api.UserTokenController do
 
   use RessipyWeb, :controller
   alias Ressipy.Accounts
+  alias Ressipy.Authorization
 
   action_fallback RessipyWeb.Api.FallbackController
 
@@ -11,13 +12,14 @@ defmodule RessipyWeb.Api.UserTokenController do
 
     with %{} = user <- Accounts.get_user_by_email_and_password(email, password) do
       Logger.metadata(user_id: user.id)
+      permissions = Authorization.permissions(user)
 
       token =
         user
         |> Accounts.generate_user_session_token()
         |> Base.encode64(padding: false)
 
-      render(conn, "create.json", token: token)
+      render(conn, :create, permissions: permissions, token: token)
     end
   end
 end
