@@ -1,5 +1,22 @@
 {
-   "webcredentials": {
-      "apps": [ "QQWWMCLZJZ.com.ressipy.Ressipy" ]
-   }
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["QQWWMCLZJZ.com.ressipy.Ressipy"],
+        "components": [
+          {
+            "/": "/categories/*",
+            "comment": "Category"
+          },
+          {
+            "/": "/recipes/*",
+            "comment": "Recipe"
+          }
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": [ "QQWWMCLZJZ.com.ressipy.Ressipy" ]
+  }
 }
