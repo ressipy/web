@@ -13,6 +13,8 @@ defmodule RessipyWeb.UserSessionController do
 
     case Accounts.get_user_by_email_and_password(email, password) do
       :invalid_login ->
+        # In order to prevent user enumeration attacks, don't disclose whether
+        # the email is registered.
         render(conn, "new.html", error_message: "Invalid email or password")
 
       :too_many_attempts ->

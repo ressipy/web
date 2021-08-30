@@ -25,7 +25,11 @@ defmodule RessipyWeb.Router do
   end
 
   if Application.get_env(:ressipy, :include_sent_email_route?, false) do
-    forward "/sent_emails", Bamboo.SentEmailViewerPlug
+    scope "/dev" do
+      pipe_through :browser
+
+      forward "/mailbox", Plug.Swoosh.MailboxPreview
+    end
   end
 
   scope "/admin", RessipyWeb do
@@ -116,6 +120,7 @@ defmodule RessipyWeb.Router do
     delete "/users/log_out", UserSessionController, :delete
     get "/users/confirm", UserConfirmationController, :new
     post "/users/confirm", UserConfirmationController, :create
-    get "/users/confirm/:token", UserConfirmationController, :confirm
+    get "/users/confirm/:token", UserConfirmationController, :edit
+    post "/users/confirm/:token", UserConfirmationController, :update
   end
 end

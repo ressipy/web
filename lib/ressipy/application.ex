@@ -7,6 +7,7 @@ defmodule Ressipy.Application do
 
   def start(_type, _args) do
     children = [
+      {Finch, name: Ressipy.SwooshClient},
       # Start the Ecto repository
       Ressipy.Repo,
       # Start the Telemetry supervisor

@@ -15,7 +15,8 @@ defmodule RessipyWeb.UserConfirmationController do
       )
     end
 
-    # Regardless of the outcome, show an impartial success/error message.
+    # In order to prevent user enumeration attacks, regardless of the outcome,
+    # show an impartial success/error message.
     conn
     |> put_flash(
       :info,
@@ -25,9 +26,13 @@ defmodule RessipyWeb.UserConfirmationController do
     |> redirect(to: "/")
   end
 
+  def edit(conn, %{"token" => token}) do
+    render(conn, "edit.html", token: token)
+  end
+
   # Do not log in the user after confirmation to avoid a
   # leaked token giving the user access to the account.
-  def confirm(conn, %{"token" => token}) do
+  def update(conn, %{"token" => token}) do
     case Accounts.confirm_user(token) do
       {:ok, _} ->
         conn

@@ -29,7 +29,7 @@ COPY lib lib
 RUN mix compile --warnings-as-errors
 
 ###
-### Second Stage - Build the Javascript parts
+### Second Stage - Build the static assets
 ###
 FROM node:lts-alpine AS js-build
 
@@ -37,9 +37,6 @@ WORKDIR /app
 
 # set build ENV as prod
 ENV NODE_ENV=prod
-
-# copy over elixir deps since some JS stuff may be pulled from there
-COPY --from=elixir-build /app/deps deps
 
 # install npm dependencies
 COPY assets/package.json assets/package-lock.json ./assets/
@@ -62,12 +59,17 @@ RUN npm run --prefix ./assets deploy
 FROM elixir-build AS release-build
 
 WORKDIR /app
+RUN mix esbuild.install
 
+COPY assets assets
+COPY --from=js-build /app/assets/node_modules assets/node_modules
 COPY --from=js-build /app/priv priv
-COPY config/runtime.exs config/runtime.exs
 
 # compile and build release
 COPY rel rel
+RUN mix esbuild default --minify
+
+COPY config/runtime.exs config/runtime.exs
 RUN mix do phx.digest, release
 
 ###

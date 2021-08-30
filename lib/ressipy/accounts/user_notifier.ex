@@ -4,8 +4,8 @@ defmodule Ressipy.Accounts.UserNotifier do
   responsible for sending those notifications to the appropriate user.
   """
 
-  use Bamboo.Phoenix, view: RessipyMailer.AccountsView
-  import Bamboo.Email
+  use Phoenix.Swoosh, view: RessipyMailer.AccountsView
+  import Swoosh.Email
   alias RessipyMailer, as: Mailer
 
   @from_address {"Ressipy", "no-reply@ressipy.com"}
@@ -16,14 +16,8 @@ defmodule Ressipy.Accounts.UserNotifier do
   @spec deliver_confirmation_instructions(User.t(), String.t()) ::
           {:ok, Bamboo.Email.t()} | {:error, Exception.t() | String.t()}
   def deliver_confirmation_instructions(user, url) do
-    new_email()
-    |> from(@from_address)
-    |> to(user.email)
-    |> subject("Confirm your Ressipy account")
-    |> assign(:user, user)
-    |> assign(:url, url)
-    |> render(:confirm_email)
-    |> Mailer.deliver_now()
+    assigns = %{user: user, url: url}
+    deliver(user, "Confirm your Ressipy account", :confirm_email, assigns)
   end
 
   @doc """
@@ -32,14 +26,8 @@ defmodule Ressipy.Accounts.UserNotifier do
   @spec deliver_reset_password_instructions(User.t(), String.t()) ::
           {:ok, Bamboo.Email.t()} | {:error, Exception.t() | String.t()}
   def deliver_reset_password_instructions(user, url) do
-    new_email()
-    |> from(@from_address)
-    |> to(user.email)
-    |> subject("Reset your password for Ressipy")
-    |> assign(:user, user)
-    |> assign(:url, url)
-    |> render(:reset_password)
-    |> Mailer.deliver_now()
+    assigns = %{user: user, url: url}
+    deliver(user, "Reset your password for Ressipy", :reset_password, assigns)
   end
 
   @doc """
@@ -48,13 +36,23 @@ defmodule Ressipy.Accounts.UserNotifier do
   @spec deliver_update_email_instructions(User.t(), String.t()) ::
           {:ok, Bamboo.Email.t()} | {:error, Exception.t() | String.t()}
   def deliver_update_email_instructions(user, url) do
-    new_email()
-    |> from(@from_address)
-    |> to(user.email)
-    |> subject("Change your email address for Ressipy")
-    |> assign(:user, user)
-    |> assign(:url, url)
-    |> render(:change_email)
-    |> Mailer.deliver_now()
+    assigns = %{user: user, url: url}
+    deliver(user, "Change your email address for Ressipy", :change_email, assigns)
+  end
+
+  # Private
+
+  # Delivers the email using the application mailer.
+  defp deliver(recipient, subject, template, assigns) do
+    email =
+      new()
+      |> to(recipient)
+      |> from(@from_address)
+      |> subject(subject)
+      |> render_body(template, assigns)
+
+    with {:ok, _metadata} <- Mailer.deliver(email) do
+      {:ok, email}
+    end
   end
 end

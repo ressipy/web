@@ -3,5 +3,5 @@ defmodule RessipyMailer do
   This module does all the work of sending out emails.
   """
 
-  use Bamboo.Mailer, otp_app: :ressipy
+  use Swoosh.Mailer, otp_app: :ressipy
 end
