@@ -5,7 +5,7 @@ defmodule Ressipy.MixProject do
     [
       app: :ressipy,
       version: "0.1.0",
-      elixir: "~> 1.7",
+      elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -55,6 +55,7 @@ defmodule Ressipy.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:recase, "~> 0.7.0"},
       {:swoosh, "~> 1.3"},
+      {:tailwind, "~> 0.1", runtime: Mix.env() == :dev},
       {:telemetry, "~> 1.0", override: true},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"}
@@ -69,12 +70,13 @@ defmodule Ressipy.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
+      compile: "compile --warnings-as-errors",
       setup: ["deps.get", "ecto.setup", "cmd --cd assets npm install"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.deploy": [
-        "cmd --cd assets npm run deploy",
+        "tailwind default --minify",
         "esbuild default --minify",
         "phx.digest"
       ]

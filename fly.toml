@@ -2,19 +2,21 @@ app = "ressipy"
 
 kill_signal = "SIGTERM"
 kill_timeout = 5
+processes = []
 
 [env]
 
 [deploy]
-release_command = "eval Ressipy.Release.migrate"
+release_command = "/app/entry eval Ressipy.Release.migrate"
 
 [[services]]
   internal_port = 4000
   protocol = "tcp"
 
   [services.concurrency]
-    hard_limit = 25
-    soft_limit = 20
+    hard_limit = 250
+    soft_limit = 200
+    type = "connections"
 
   [[services.ports]]
     handlers = ["http"]
