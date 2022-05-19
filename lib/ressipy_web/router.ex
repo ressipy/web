@@ -59,6 +59,8 @@ defmodule RessipyWeb.Router do
   scope "/", RessipyWeb do
     pipe_through :browser
 
+    get "/privacy-policy", PageController, :privacy_policy
+
     get "/", CategoryController, :index
     get "/categories/:slug", CategoryController, :show
     get "/recipes/:slug", RecipeController, :show
