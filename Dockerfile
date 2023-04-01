@@ -1,7 +1,7 @@
 ###
 ### Builder Stage
 ###
-FROM elixir:1.13-alpine AS builder
+FROM elixir:1.14-alpine AS builder
 
 RUN apk add --no-cache build-base
 
@@ -33,7 +33,7 @@ COPY assets assets
 ###
 ### Final Stage - Separate image to keep it smaller
 ###
-FROM alpine:3.14 AS app
+FROM alpine:3.17 AS app
 RUN apk add --no-cache libstdc++ openssl ncurses-libs
 
 ENV LANG en_US.UTF-8

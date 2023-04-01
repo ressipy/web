@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 config :ressipy, RessipyWeb.Endpoint,
   url: [host: "ressipy.com", port: 443],

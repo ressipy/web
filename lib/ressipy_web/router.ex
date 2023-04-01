@@ -24,7 +24,7 @@ defmodule RessipyWeb.Router do
     plug RessipyWeb.Authorization, :view_admin_panel
   end
 
-  if Application.get_env(:ressipy, :include_sent_email_route?, false) do
+  if Application.compile_env(:ressipy, :include_sent_email_route?, false) do
     scope "/dev" do
       pipe_through :browser
 
