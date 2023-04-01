@@ -18,7 +18,7 @@ defmodule Ressipy.RateLimiting do
 
       {:error, error} ->
         Logger.error("Error when checking rate limit for login: #{inspect(error)}")
-        :deny
+        :allow
     end
   end
 end
