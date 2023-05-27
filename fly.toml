@@ -1,34 +1,23 @@
+# fly.toml app configuration file generated for ressipy on 2023-05-27T22:16:44+01:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
 app = "ressipy"
-
+primary_region = "dfw"
 kill_signal = "SIGTERM"
-kill_timeout = 5
-processes = []
-
-[env]
 
 [deploy]
-release_command = "/app/entry eval Ressipy.Release.migrate"
+  release_command = "/app/entry eval Ressipy.Release.migrate"
 
-[[services]]
+[http_service]
   internal_port = 4000
-  protocol = "tcp"
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
 
-  [services.concurrency]
-    hard_limit = 250
-    soft_limit = 200
+  [http_service.concurrency]
     type = "connections"
-
-  [[services.ports]]
-    handlers = ["http"]
-    port = 80
-
-  [[services.ports]]
-    handlers = ["tls", "http"]
-    port = 443
-
-  [[services.tcp_checks]]
-    grace_period = "10s"
-    interval = "5s"
-    port = "4000"
-    restart_limit = 1
-    timeout = "1s"
+    hard_limit = 1000
+    soft_limit = 1000
